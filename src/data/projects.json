@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "slug": "aurora-fintech",
+    "title": "Aurora — Plataforma Financiera",
+    "client": "Aurora Capital",
+    "year": "2026",
+    "axes": ["Experiencia", "Identidad"],
+    "category": "Desarrollo Web & Branding",
+    "excerpt": "Rediseño completo de identidad y desarrollo de interfaz web con Astro para una firma de finanzas descentralizadas.",
+    "featured": true,
+    "stats": [
+      { "label": "Lighthouse Score", "value": "100/100" },
+      { "label": "Tasa de Conversión", "value": "+42%" }
+    ],
+    "tags": ["Astro", "Tailwind CSS", "React", "Branding"]
+  },
+  {
+    "id": 2,
+    "slug": "nexus-studios",
+    "title": "Nexus — Universo de Marca & Storytelling",
+    "client": "Nexus Studios",
+    "year": "2026",
+    "axes": ["Identidad", "Contenido"],
+    "category": "Branding & Multimedia",
+    "excerpt": "Dirección de arte, manual de marca interactivo y activos multimedia para productora audiovisual de impacto.",
+    "featured": true,
+    "stats": [
+      { "label": "Engagement", "value": "+68%" },
+      { "label": "Alcance Visual", "value": "2.4M" }
+    ],
+    "tags": ["Storytelling", "Identidad Visual", "Motion Graphics"]
+  },
+  {
+    "id": 3,
+    "slug": "orbital-iot",
+    "title": "Orbital — Hardware & Software de Monitoreo",
+    "client": "Orbital IoT",
+    "year": "2025",
+    "axes": ["Experiencia", "Contenido"],
+    "category": "Web App & Marketing",
+    "excerpt": "Sitio estático de alta conversión y suite de contenidos para el lanzamiento de un sensor inteligente.",
+    "featured": true,
+    "stats": [
+      { "label": "Velocidad Carga", "value": "0.4s" },
+      { "label": "Ventas Early-Bird", "value": "100%" }
+    ],
+    "tags": ["Headless CMS", "UX Design", "Copywriting"]
+  }
+]

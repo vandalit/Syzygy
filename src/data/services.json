@@ -1,0 +1,50 @@
+[
+  {
+    "id": "eje-experiencia",
+    "axis": "Experiencia",
+    "subheading": "Web Digital → Evoluciona como UX",
+    "color": "#00f0ff",
+    "accentClass": "text-cyan-400",
+    "borderClass": "border-cyan-500/30",
+    "bgGlow": "rgba(0, 240, 255, 0.15)",
+    "description": "Desarrollo de interfaces digitales ultrarrápidas, modulares y memorables. No construimos sitios web genéricos: programamos experiencias interactivas optimizadas para conversión y velocidad 100/100.",
+    "deliverables": [
+      "Arquitectura Frontend Headless (Astro, React)",
+      "Optimización Core Web Vitals & SEO Técnico",
+      "Sistemas de Diseño y Componentes Reutilizables",
+      "Micro-interacciones y Animaciones Fluidas"
+    ]
+  },
+  {
+    "id": "eje-identidad",
+    "axis": "Identidad",
+    "subheading": "Branding → Evoluciona como Storytelling",
+    "color": "#a855f7",
+    "accentClass": "text-purple-400",
+    "borderClass": "border-purple-500/30",
+    "bgGlow": "rgba(168, 85, 247, 0.15)",
+    "description": "Construcción del universo visual y conceptual de una marca. Transformamos el diseño gráfico tradicional en narrativas vivas que transmiten autoridad, coherencia y diferenciación radical.",
+    "deliverables": [
+      "Identidad Visual Completa & Manual de Marca",
+      "Estrategia de Naming y Tono de Voz",
+      "Diseño Editorial y Empaque Digital",
+      "Dirección de Arte y Guías de Estilo"
+    ]
+  },
+  {
+    "id": "eje-contenido",
+    "axis": "Contenido",
+    "subheading": "Multimedia → Evoluciona como Marketing",
+    "color": "#f43f5e",
+    "accentClass": "text-rose-400",
+    "borderClass": "border-rose-500/30",
+    "bgGlow": "rgba(244, 63, 94, 0.15)",
+    "description": "Creación de insumos visuales, audiovisuales y editoriales que atraen, educan y convierten. El contenido no es relleno: es el combustible estratégico que da vida a los otros dos ejes.",
+    "deliverables": [
+      "Producción Audiovisual y Motion Graphics",
+      "Activos Gráficos para Campañas de Lanzamiento",
+      "Copywriting Persuasivo y Storytelling de Producto",
+      "Estrategia de Adquisición y Posicionamiento"
+    ]
+  }
+]
