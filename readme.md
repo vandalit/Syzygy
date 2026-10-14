@@ -41,38 +41,60 @@ Para **Syzygy**, este fenómeno define nuestra metodología de trabajo: una marc
 
 ## 2. Arquitectura Tecnológica
 
-Para maximizar el rendimiento, garantizar SEO de primer nivel y aprovechar al máximo la infraestructura gratuita de **Oracle Cloud Free Tier**, la plataforma se diseña bajo el paradigma **Headless Decoupled**:
+La infraestructura está calibrada en un modelo **decoupled multi-host**, separando la capa de gestión (cPanel) de la capa de entrega de alto rendimiento (Oracle VPS), orquestado por **GitHub Actions**:
 
 ```
- ┌────────────────────────────────────────────────────────┐
- │            ORACLE CLOUD FREE TIER (VPS)                │
- │                                                        │
- │  ┌─────────────────────────┐  ┌─────────────────────┐  │
- │  │      FRONTEND (SSG)     │  │  HEADLESS WORDPRESS │  │
- │  │                         │  │                     │  │
- │  │ • Astro                 │  │ • Motor CMS / Blog  │  │
- │  │ • Component Islands     │  │ • WPGraphQL / REST  │  │
- │  │ • Nginx (Servidor est.) │  │ • Yoast / RankMath  │  │
- │  │ • Consumo: ~20MB RAM    │  │ • Dominio CMS       │  │
- │  │ • 100/100 Core Vitals   │  │ • MySQL / MariaDB   │  │
- │  └────────────▲────────────┘  └──────────┬──────────┘  │
- │               │                          │             │
- │               └──────── GraphQL ─────────┘             │
- └────────────────────────────────────────────────────────┘
+                              ┌────────────────┐
+                              │     NIC.CL     │
+                              │  metamedia.cl  │
+                              └───────┬────────┘
+                                      │ (Delegación DNS / Nameservers)
+                                      ▼
+                        ┌───────────────────────────┐
+                        │       HOSTING CPANEL      │
+                        │    (DNS Zone Editor & WP) │
+                        └──────┬─────────────┬──────┘
+                               │             │
+          A Record (IP Oracle) │             │ A Record / Local (IP cPanel)
+                               ▼             ▼
+  ┌──────────────────────────────┐        ┌──────────────────────────────┐
+  │   ORACLE CLOUD FREE TIER     │        │    BACKEND CPANEL (HOSTING)  │
+  │  syzygy.metamedia.cl         │        │  cms-syzygy.metamedia.cl      │
+  ├──────────────────────────────┤        ├──────────────────────────────┤
+  │ • Nginx (Servidor estático)  │        │ • WordPress clásico          │
+  │ • Astro SSG (HTML/CSS puro)  │        │ • Base de datos MySQL cPanel │
+  │ • Islas interactivas         │        │ • WPGraphQL / REST API       │
+  │ • RAM: ~15MB | CPU: ~0%      │        │ • RankMath / Yoast SEO       │
+  │ • SSL: Let's Encrypt / Cert  │        │ • Webhook de despliegue      │
+  └──────────────▲───────────────┘        └──────────────┬───────────────┘
+                 │                                       │
+                 │   3. Despliegue rsync/SSH             │ 1. Dispara Webhook al
+                 │      (carpeta dist/)                  │    publicar/editar
+                 │                                       ▼
+        ┌────────┴──────────────────────────────────────────────┐
+        │            GITHUB ACTIONS (Pipeline CI/CD)             │
+        │ • Repositorio privado en GitHub                       │
+        │ • Ejecuta `npm run build` (consume GraphQL de cPanel) │
+        │ • Sube los estáticos al Nginx de Oracle vía SSH       │
+        └───────────────────────────────────────────────────────┘
 ```
 
-### Componentes del Stack
-* **Frontend:** **Astro** (Generación de Sitios Estáticos - SSG).
-  * *Zero JS by default*: Salida de HTML y CSS puro para páginas informativas y de contenido.
-  * *Component Islands*: Micro-apps interactivas (React/Svelte/Vanilla JS) solo donde se requiere interacción visual avanzada (showcase, cotizadores, filtros dinámicos).
-  * *Estilos:* Tailwind CSS / CSS Moderno con Design Tokens.
-  * *Animaciones:* GSAP / Framer Motion / Lenis (scroll suave y transiciones de alto impacto).
-* **Backend (Headless CMS):** **WordPress** en subdominio aislado (ej. `cms.syzygy.agency`).
-  * Gestión centralizada de artículos, casos de estudio, taxonomías y metadatos de SEO.
-  * Conexión con Google Search Console, Google Analytics y plugins especializados sin ensuciar el código del frontend.
-* **Infraestructura:** **Oracle Cloud (Always Free Tier)**.
-  * Frontend servido por Nginx (consumo de CPU prácticamente nulo y uso ínfimo de RAM).
-  * Entorno seguro con certificados SSL automatizados (Let's Encrypt).
+### Componentes del Stack y Distribución
+* **Dominio & DNS (`metamedia.cl`):**
+  * NIC.cl apunta a los servidores DNS del hosting cPanel.
+  * Desde el **Zone Editor de cPanel**:
+    * `syzygy.metamedia.cl` $\rightarrow$ Registro `A` apuntando a la IP pública del VPS de Oracle.
+    * `cms-syzygy.metamedia.cl` (o `cms.syzygy.metamedia.cl`) $\rightarrow$ Subdominio apuntando al directorio de WordPress dentro de cPanel.
+* **Backend Headless (Hosting cPanel):**
+  * WordPress tradicional y económico sin complicaciones de mantenimiento de servidor.
+  * cPanel gestiona PHP, MySQL, phpMyAdmin, respaldos y certificados SSL del CMS.
+  * WPGraphQL expone los datos; un webhook notifica a GitHub Actions cada vez que se publica un cambio.
+* **Frontend Estático (Oracle Cloud VPS):**
+  * Nginx sirviendo exclusivamente archivos estáticos compilados (`dist/`).
+  * Consumo ínfimo de recursos (~15MB RAM), dejando el VPS de Oracle libre para futuros proyectos.
+* **Automatización CI/CD (GitHub Actions):**
+  * *Push a `main`*: Construye y despliega automáticamente.
+  * *Publicación en WordPress*: El webhook dispara un `repository_dispatch` en GitHub Actions, reconstruye el sitio con los nuevos datos y actualiza Oracle en menos de 40 segundos sin tocar el servidor.
 
 ---
 
@@ -101,21 +123,26 @@ El objetivo es tener la web de la agencia 100% funcional, interactiva y navegabl
 
 ---
 
-### Fase 2: Configuración del Backend Headless (WordPress)
-- [ ] Configuración de Custom Post Types (CPT) en WordPress: *Proyectos/Portfolio*, *Servicios*, *Testimonios*.
-- [ ] Integración de **WPGraphQL** (o endpoints optimizados de la REST API).
-- [ ] Integración de plugin SEO (**Rank Math** o **Yoast**) con su respectiva extensión de GraphQL para exponer metadatos, títulos, descripciones y canonicals.
-- [ ] Configuración de Webhooks en WordPress para disparar builds automáticos cuando se publique o actualice contenido.
+### Fase 2: Configuración del Backend Headless (Hosting cPanel)
+- [ ] Creación de subdominio en cPanel (ej. `cms-syzygy.metamedia.cl` o `cms.syzygy.metamedia.cl`).
+- [ ] Instalación limpia de WordPress desde cPanel y activación de certificado SSL (AutoSSL / Let's Encrypt).
+- [ ] Configuración de Custom Post Types (CPT) y ACF: *Proyectos/Portfolio*, *Servicios*.
+- [ ] Instalación de **WPGraphQL** (o configuración de REST API con CORS habilitado).
+- [ ] Integración de plugin SEO (**Rank Math** o **Yoast**) con soporte GraphQL para metadatos, títulos, descripciones y canonicals.
+- [ ] Configuración de plugin de Webhooks (ej. *WP Webhooks* o *Deployer*) para emitir evento a GitHub Actions al publicar contenido.
 
 ---
 
-### Fase 3: Servidor Oracle Cloud & Despliegue
-- [ ] Aprovisionamiento de instancia VM en Oracle Cloud Free Tier.
-- [ ] Configuración del servidor web (Nginx) y políticas de firewall (iptables / OCI Security Lists).
-- [ ] Despliegue de WordPress con Docker Compose o stack LEMP ligero.
-- [ ] Configuración de subdominios (`syzygy.agency` para frontend, `cms.syzygy.agency` para WordPress).
-- [ ] Emisión de certificados SSL con Certbot.
-- [ ] Pipeline de despliegue continuo (CI/CD) para compilar Astro y mover la carpeta `dist/` a Nginx.
+### Fase 3: Infraestructura Oracle Cloud, DNS en cPanel & CI/CD
+- [ ] **Configuración DNS (cPanel Zone Editor):**
+  - Registro `A` para `syzygy.metamedia.cl` $\rightarrow$ IP pública del VPS Oracle.
+- [ ] **Aprovisionamiento de Oracle Cloud (Always Free):**
+  - Configuración de Nginx para servir el directorio `/var/www/syzygy/dist`.
+  - Emisión de certificado SSL para `syzygy.metamedia.cl` mediante Certbot.
+- [ ] **Pipeline en GitHub Actions (`.github/workflows/deploy.yml`):**
+  - Trigger 1: `push` a la rama `main`.
+  - Trigger 2: `repository_dispatch` (disparado por el webhook de WordPress).
+  - Tarea: `npm run build` $\rightarrow$ sincronización vía SSH/rsync hacia el Nginx de Oracle.
 
 ---
 
