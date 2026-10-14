@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy:preview": "npm run build && gh-pages -d dist -b gh-pages"
+    "deploy:preview": "npm run build && gh-pages -d dist -b gh-pages -t"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.0",
