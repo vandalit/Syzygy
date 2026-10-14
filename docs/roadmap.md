@@ -54,18 +54,22 @@ El objetivo es tener la web de la agencia 100% funcional, interactiva y navegabl
 
 ---
 
-## Fase 3: Infraestructura Oracle Cloud, DNS en cPanel & CI/CD
+## Fase 3: Deploy a Rizoma (Oracle Cloud) & CI/CD
 
+> **Bloqueante:** Rizoma debe estar en producción. Se activa cuando N8N Proyecto 3 (Streams) esté completo.  
+> Ver proyecto [`Rizoma`](file:///home/vandalit/work/vandalit/Rizoma) para seguimiento de ese ecosistema.
+
+- [ ] **Pre-requisito:** Rizoma en producción (Oracle Cloud VPS administrado con contenedores).
 - [ ] **Configuración DNS (cPanel Zone Editor):**
-  - [ ] Registro `A` para `syzygy.metamedia.cl` $\rightarrow$ IP pública del VPS Oracle.
-- [ ] **Aprovisionamiento de Oracle Cloud (Always Free):**
-  - [ ] Configuración de Nginx para servir el directorio `/var/www/syzygy/dist`.
+  - [ ] Registro `A` para `syzygy.metamedia.cl` → IP pública del VPS Oracle (gestionada por Rizoma).
+- [ ] **Dentro de Rizoma — Aprovisionar espacio para Syzygy:**
+  - [ ] Crear contenedor o virtual host Nginx en Rizoma para servir `/var/www/syzygy/dist`.
   - [ ] Emisión de certificado SSL para `syzygy.metamedia.cl` mediante Certbot.
 - [ ] **Pipeline en GitHub Actions (`.github/workflows/deploy.yml`):**
   - [ ] Configurar secretos en el repositorio GitHub (`ORACLE_HOST`, `ORACLE_USER`, `SSH_PRIVATE_KEY`).
   - [ ] Trigger 1: `push` a la rama `main`.
   - [ ] Trigger 2: `repository_dispatch` (disparado por el webhook de WordPress).
-  - [ ] Tarea: `npm run build` $\rightarrow$ sincronización vía SSH/rsync hacia el Nginx de Oracle.
+  - [ ] Tarea: `npm run build` → sincronización vía SSH/rsync hacia Rizoma.
 
 ---
 

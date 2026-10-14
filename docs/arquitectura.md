@@ -4,6 +4,36 @@ Este documento detalla la infraestructura, flujo de datos y estrategia de despli
 
 ---
 
+## 0. Dependencia de Ecosistema: Rizoma
+
+Syzygy no se despliega directamente en Oracle Cloud. Su infraestructura de producción depende del proyecto **Rizoma**, que es la capa de administración del Oracle Cloud VPS del ecosistema completo.
+
+```
+ECOSISTEMA vandalit
+│
+├── N8N (automatización y aprendizaje)
+│   └── Proyecto 3 (Streams) ──────────────┐
+│                                           │ trigger
+├── RIZOMA (Oracle Cloud VPS)  ◄────────────┘
+│   ├── Gestión de contenedores y servicios
+│   ├── Flujos de datos del ecosistema
+│   └── Hosting para proyectos puntuales
+│       └── Syzygy ──────────────────────────── ESTE PROYECTO
+│
+└── CPANEL (Hosting compartido)
+    └── WordPress Headless (backend CMS de Syzygy)
+```
+
+**Secuencia de activación de Rizoma:**
+1. N8N llega al Proyecto 3 (Streams).
+2. Se activa Rizoma en producción (Oracle Cloud VPS).
+3. Rizoma prepara el espacio para Syzygy (Nginx, subdominio, SSL).
+4. Se conecta el pipeline CI/CD de GitHub Actions con Rizoma.
+
+> El desarrollo del **frontend de Syzygy** (Fase 1) es completamente independiente de Rizoma y avanza en paralelo.
+
+---
+
 ## 1. Visión General de la Topología
 
 La solución adopta un patrón **Decoupled Multi-Host**, aislando el motor de gestión de contenidos (CMS en cPanel) del motor de entrega de alto rendimiento (Frontend estático en Oracle Cloud VPS):
