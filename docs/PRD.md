@@ -22,9 +22,11 @@ Este PRD es el punto de enlace central con los documentos especializados del pro
 
 | Documento | Ubicación | Descripción |
 | :--- | :--- | :--- |
-| **Concepto & Filosofía** | [`docs/concepto.md`](file:///home/vandalit/work/vandalit/Syzygy/docs/concepto.md) | Tesis astronómica de la sizigia, los 3 ejes en profundidad y manifiesto de diseño. |
-| **Arquitectura Técnica** | [`docs/arquitectura.md`](file:///home/vandalit/work/vandalit/Syzygy/docs/arquitectura.md) | Topología multi-host, cPanel DNS, Oracle VPS, flujo GraphQL y pipeline CI/CD. |
-| **Hoja de Ruta (Roadmap)** | [`docs/roadmap.md`](file:///home/vandalit/work/vandalit/Syzygy/docs/roadmap.md) | Seguimiento pormenorizado de las 4 fases de desarrollo y tareas pendientes. |
+| **PRD — Requerimientos de Producto** | [`docs/PRD.md`](./PRD.md) | [Este archivo] Especificación funcional, no funcional, contratos de datos y contexto integral. |
+| **Concepto & Filosofía** | [`docs/concepto.md`](./concepto.md) | Tesis astronómica de la sizigia, los 3 ejes en profundidad y manifiesto de diseño. |
+| **Arquitectura Técnica** | [`docs/arquitectura.md`](./arquitectura.md) | Topología multi-host, cPanel DNS, Oracle VPS, flujo GraphQL y pipeline CI/CD. |
+| **Hoja de Ruta (Roadmap)** | [`docs/roadmap.md`](./roadmap.md) | Seguimiento pormenorizado de las 4 fases de desarrollo y tareas pendientes. |
+| **Checklist de Decisiones** | [`docs/checklist_decisiones.md`](./checklist_decisiones.md) | Control de autorización de decisiones de diseño, IA, desarrollo e infraestructura. Incluye análisis de preview en GitHub Pages. |
 
 ---
 
